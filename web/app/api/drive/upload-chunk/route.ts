@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { driveAccessToken, readDriveJson, updateDriveJson } from "../../../lib/google-drive";
+import { notifyN8nWorker } from "../../../lib/n8n";
 
 export const runtime = "nodejs";
 
@@ -29,6 +30,12 @@ export async function PUT(request: Request) {
     const file = raw ? JSON.parse(raw) : {};
     const record = await readDriveJson(recordId);
     await updateDriveJson(recordId, { ...record, status: "queued", driveFileId: file.id, uploadedAt: new Date().toISOString() }, { transcription_job: jobId, transcription_status: "queued" });
+    try {
+      await notifyN8nWorker({ jobId, recordId, fileId: file.id });
+      console.info(`[drive-upload:${jobId}] worker n8n notificado`);
+    } catch (notificationError) {
+      console.warn(`[drive-upload:${jobId}] no se pudo notificar a n8n`, notificationError);
+    }
     console.info(`[drive-upload:${jobId}] subida terminada file=${file.id}`);
     return NextResponse.json({ status: "completed", fileId: file.id, file });
   } catch (error) {
