@@ -1,0 +1,25 @@
+{
+  "nombre_proyecto": "Proyecto Transcripciones",
+  "idioma": "es",
+  "modelo_whisper": "small",
+  "fuentes": [
+    {
+      "nombre": "Prioridad 1",
+      "prioridad": 1,
+      "folder_id": "1ESwoY4-8o35Ay8oek3z3hcMupD5kSB1f",
+      "carpetas_permitidas": []
+    },
+    {
+      "nombre": "Prioridad 2",
+      "prioridad": 2,
+      "folder_id": "1cXYOmqGiUbE5aCGWDM33KBSwhjPGErre",
+      "carpetas_permitidas": []
+    },
+    {
+      "nombre": "Prioridad 3",
+      "prioridad": 3,
+      "folder_id": "1EVAno1YErj_QwqhJKgFJ9J3OB0RWkFYY",
+      "carpetas_permitidas": ["Masterclasses", "Modulos", "Módulos", "Bonos"]
+    }
+  ]
+}

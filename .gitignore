@@ -1,0 +1,42 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+web/.env.local
+client_secret*.json
+token*.json
+credentials*.json
+
+# Node / Next.js
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local test media and generated files
+para pruebas/
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.avi
+*.m4v
+
+# Legacy workflows not used by the web + Drive worker
+01_Inventario_Colab.ipynb
+02_Procesar_Colab.ipynb
+03_Procesar_Groq_Colab.ipynb
+gestor_drive.py
+KAGGLE_PENDIENTE.md
+
+# Local OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
