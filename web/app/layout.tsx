@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Transcriptor temporal",
-  description: "Sube archivos temporalmente y conviértelos en transcripciones.",
+  title: "Transcriptor",
+  description: "Convierte tus videos en texto.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

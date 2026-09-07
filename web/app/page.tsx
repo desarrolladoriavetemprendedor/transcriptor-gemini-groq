@@ -85,7 +85,7 @@ function transcribeWebFile(file: File, onUploadProgress: (progress: number) => v
   });
 }
 
-function statusLabel(item: UploadFile) {
+function legacyStatusLabel(item: UploadFile) {
   if (item.status === "invalid") return "Se omitirá";
   if (item.status === "omitted") return "Omitido";
   if (item.status === "uploading") return "Subiendo";
@@ -99,7 +99,7 @@ function statusLabel(item: UploadFile) {
   return "Listo";
 }
 
-function progressLabel(item: UploadFile) {
+function legacyProgressLabel(item: UploadFile) {
   if (item.phase) return item.phase;
   if (item.status === "uploading") return `Subiendo a Drive · ${item.progress}%`;
   if (item.status === "queued") return "En espera del worker";
@@ -107,6 +107,29 @@ function progressLabel(item: UploadFile) {
   if (item.status === "processing" && item.provider === "gemini") return "Gemini · transcribiendo en la nube";
   if (item.status === "processing") return "Transcribiendo en la nube";
   if (item.status === "done") return "TXT listo";
+  return "";
+}
+
+function statusLabel(item: UploadFile) {
+  if (item.status === "invalid") return "Se omitirá";
+  if (item.status === "omitted") return "Omitido";
+  if (item.status === "uploading") return "Subiendo";
+  if (item.status === "processing") return "Procesando";
+  if (item.status === "queued") return "Preparando";
+  if (item.status === "done") return "Listo";
+  if (item.status === "failed") return "No se pudo completar";
+  return "Listo";
+}
+
+function progressLabel(item: UploadFile) {
+  if (item.status === "uploading") return `Subiendo archivo · ${item.progress}%`;
+  if (item.status === "queued") return "Preparando el procesamiento";
+  const fragment = item.phase?.match(/(?:fragmento|Fragmento) (\d+) de (\d+)/);
+  if (item.status === "processing" && fragment) return `Procesando parte ${fragment[1]} de ${fragment[2]}`;
+  if (item.status === "processing" && item.phase?.includes("Uniendo")) return "Organizando la transcripción";
+  if (item.status === "processing" && item.phase?.includes("Guardando")) return "Preparando el archivo de texto";
+  if (item.status === "processing") return "Procesando el video";
+  if (item.status === "done") return "Archivo listo";
   return "";
 }
 
@@ -450,20 +473,20 @@ export default function Home() {
   return (
     <main className="app-shell">
       <header className="topbar">
-        <div className="brand"><span className="brand-mark">T</span><span>Transcriptor</span></div>
+        <div className="brand"><span className="brand-mark">T</span><span>Transcriptor Pecuarius</span></div>
         <div className={`connection ${sessionReady ? "online" : ""}`}><span />{sessionReady ? "Listo" : "Conectando"}</div>
       </header>
 
       <section className="content">
-        {stage !== "done" && <div className="intro"><p className="eyebrow">NUEVA TRANSCRIPCIÓN</p><h1>Sube tus archivos</h1><p className="subtitle">Se guardan temporalmente y se eliminan al finalizar.</p></div>}
+        {stage !== "done" && <div className="intro"><h1>Sube tus videos</h1></div>}
 
         <section className="card workspace">
           {stage === "upload" && <>
             <div className={`upload-zone ${dragging ? "dragging" : ""}`} onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={onDrop}>
               <div className="upload-icon">↑</div>
-              <h2>Arrastra los archivos aquí</h2>
-              <p>o selecciónalos desde tu equipo</p>
-              <button className="button button-primary" onClick={() => inputRef.current?.click()} disabled={busy}>Seleccionar archivos</button>
+              <h2>Arrastra tus videos aquí</h2>
+              <p>o elígelos desde tu equipo</p>
+              <button className="button button-primary" onClick={() => inputRef.current?.click()} disabled={busy}>Elegir videos</button>
               <input ref={inputRef} className="file-input" type="file" multiple accept="*/*" onChange={onInput} />
             </div>
             {items.length > 0 && <><div className="list-heading"><strong>{items.length} archivo{items.length === 1 ? "" : "s"}</strong>{validItems.length > 1 && <span>Selecciona los que quieras procesar</span>}</div><FileList items={items} selectable={validItems.length > 1} onToggle={toggleSelection} /></>}
@@ -489,7 +512,7 @@ export default function Home() {
               {currentIsIndeterminate ? <div className="progress-track progress-track-large is-indeterminate"><span /></div> : currentHasChunks ? <FragmentProgress done={currentItem?.chunksDone || 0} total={currentItem?.chunksTotal || 0} /> : <div className="progress-track progress-track-large"><span style={{ width: `${overallProgress}%` }} /></div>}
               {currentItem && <p><span>Archivo actual:</span> <strong>{currentItem.file.name}</strong><br /><small>{progressLabel(currentItem)}</small></p>}
             </div>
-            <div className="section-title"><span className="step">03</span><div><h2>{queuedItems.length ? "Archivos en espera" : "Procesando archivos"}</h2><p>{queuedItems.length ? "El resultado aparecerá cuando termine el procesamiento." : `${processingIndex + 1} de ${processingTotal}`}</p></div></div>
+            <div className="section-title"><span className="step">03</span><div><h2>{queuedItems.length ? "Videos en espera" : "Procesando videos"}</h2><p>{queuedItems.length ? "El resultado aparecerá cuando termine." : `${processingIndex + 1} de ${processingTotal}`}</p></div></div>
             <FileList items={items} />
             <Actions onCancel={cancelSession} primaryLabel="Procesando…" onPrimary={() => undefined} primaryDisabled />
           </>}
@@ -500,7 +523,7 @@ export default function Home() {
             <Actions onCancel={cancelSession} primaryLabel="Nueva transcripción" onPrimary={cancelSession} primaryDisabled={false} />
           </>}
           <details className="activity-panel">
-            <summary>Actividad técnica ({logs.length})</summary>
+            <summary>Detalles del proceso ({logs.length})</summary>
             <div className="activity-list">{logs.length === 0 ? <span className="activity-empty">Sin eventos todavía.</span> : logs.map((log) => <div className={`activity-line ${log.level}`} key={log.id}><time>{log.time}</time><span>{log.message}</span></div>)}</div>
           </details>
         </section>
