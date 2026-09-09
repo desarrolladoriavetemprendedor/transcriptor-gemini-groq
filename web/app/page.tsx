@@ -27,7 +27,7 @@ type LogEntry = { id: string; time: string; level: "info" | "success" | "error";
 
 const MAX_WEB_BYTES = 4 * 1024 * 1024;
 const MAX_WEB_DURATION = 15 * 60;
-const LINK_TRANSCRIPTION_URL = "https://colab.research.google.com/drive/1egr1hqTHQl00wDqQU6yNAyXcwpHlfpkO";
+const LINK_TRANSCRIPTION_URL = "https://colab.research.google.com/drive/1Gqy5ylc_YMN7XnCjcBH6sTgK_oUTpa9v";
 
 function formatBytes(value: number) {
   if (value < 1024 * 1024) return `${(value / 1024).toFixed(0)} KB`;
