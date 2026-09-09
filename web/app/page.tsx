@@ -27,6 +27,7 @@ type LogEntry = { id: string; time: string; level: "info" | "success" | "error";
 
 const MAX_WEB_BYTES = 4 * 1024 * 1024;
 const MAX_WEB_DURATION = 15 * 60;
+const LINK_TRANSCRIPTION_URL = "https://colab.research.google.com/drive/1egr1hqTHQl00wDqQU6yNAyXcwpHlfpkO";
 
 function formatBytes(value: number) {
   if (value < 1024 * 1024) return `${(value / 1024).toFixed(0)} KB`;
@@ -474,7 +475,12 @@ export default function Home() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand"><span className="brand-mark">T</span><span>Transcriptor Pecuarius</span></div>
-        <div className={`connection ${sessionReady ? "online" : ""}`}><span />{sessionReady ? "Listo" : "Conectando"}</div>
+        <div className="topbar-actions">
+          <a className="button button-link" href={LINK_TRANSCRIPTION_URL} target="_blank" rel="noreferrer">
+            Procesar por Enlace
+          </a>
+          <div className={`connection ${sessionReady ? "online" : ""}`}><span />{sessionReady ? "Listo" : "Conectando"}</div>
+        </div>
       </header>
 
       <section className="content">

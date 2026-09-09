@@ -24,6 +24,7 @@ button { cursor: pointer; }
 .topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; width: min(960px, calc(100% - 40px)); margin: 0 auto; }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; letter-spacing: -.02em; }
 .brand-mark { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 9px; color: white; background: var(--ink); font-size: 14px; }
+.topbar-actions { display: flex; align-items: center; gap: 16px; }
 .connection { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
 .connection span { width: 7px; height: 7px; border-radius: 50%; background: #c3cad3; }
 .connection.online span { background: #38a86d; }
@@ -45,6 +46,8 @@ h1 { margin: 0; font-size: clamp(34px, 6vw, 56px); line-height: 1; letter-spacin
 .button:disabled { cursor: not-allowed; opacity: .45; transform: none; }
 .button-primary { color: white; background: var(--blue); box-shadow: 0 8px 17px rgba(54, 104, 232, .18); }
 .button-primary:hover { background: var(--blue-dark); }
+.button-link { display: inline-flex; align-items: center; justify-content: center; color: var(--blue); background: var(--blue-soft); border-color: #d8e2ff; text-decoration: none; white-space: nowrap; }
+.button-link:hover { color: white; background: var(--blue); }
 .button-cancel { color: var(--red); background: white; border-color: #f0d0cd; }
 .list-heading, .list-tools { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 24px 0 10px; font-size: 13px; }
 .list-heading span, .list-tools span { color: var(--muted); font-size: 12px; }
@@ -88,6 +91,12 @@ h1 { margin: 0; font-size: clamp(34px, 6vw, 56px); line-height: 1; letter-spacin
 .result-file { color: #26815b; background: #e5f6ed; font-size: 10px; }
 .activity-panel { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; color: var(--muted); font-size: 11px; }
 .activity-panel summary { cursor: pointer; color: var(--muted); font-weight: 800; }
+
+@media (max-width: 620px) {
+  .topbar { height: auto; padding: 16px 0; gap: 14px; align-items: flex-start; }
+  .topbar-actions { flex-direction: column-reverse; align-items: flex-end; gap: 9px; }
+  .button-link { min-height: 38px; padding: 0 12px; font-size: 12px; }
+}
 .activity-list { display: grid; gap: 6px; max-height: 180px; overflow: auto; margin-top: 11px; padding: 10px; border-radius: 10px; background: #f8fafc; }
 .activity-line { display: flex; gap: 9px; line-height: 1.4; }
 .activity-line time { flex: 0 0 auto; color: #a0a8b5; font-variant-numeric: tabular-nums; }
